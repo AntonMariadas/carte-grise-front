@@ -109,7 +109,8 @@ const Simulateur = () => {
         const frais = 27.90
 
 
-        // Y.6 MONTANT TOTAL
+        // MONTANT TOTAL
+        let montantTotal = y1 + y2 + y3 + y4 + y5 + y6
 
     }
 
