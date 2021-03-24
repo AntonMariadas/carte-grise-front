@@ -11,8 +11,7 @@ const Simulateur = () => {
     const [vehiculeEnergie, setVehiculeEnergie] = useState(false)
     const { register, handleSubmit } = useForm()
 
-    console.log(vehiculeNeuf, vehiculeTourisme, vehiculeEnergie)
-
+    /* CHAMPS SPECIFIQUES DU FORMULAIRE */
 
     const showVehiculeTypeInput = () => {
         const type = datas.vehicules[1].type
@@ -58,7 +57,7 @@ const Simulateur = () => {
         else setVehiculeEnergie(false)
     }
 
-
+    /* TRAITEMENT DU FORMULAIRE */
 
     const onSubmit = (data) => {
         let submittedDatas = {
@@ -133,6 +132,7 @@ const Simulateur = () => {
 
     }
 
+    /* FORMULAIRE */
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
