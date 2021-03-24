@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
 import { datas } from './datas'
-import { co2 } from "./co2"
+import { tauxCo2 } from "./co2"
 
 const Simulateur = () => {
 
     const [vehiculeTypeInput, setVehiculeTypeInput] = useState(false)
-    const [co2, setCo2] = useState(false)
-
+    const [vehiculeNeuf, setVehiculeNeuf] = useState(true)
+    const [vehiculeTourisme, setVehiculeTourisme] = useState(true)
+    const [vehiculeEnergie, setVehiculeEnergie] = useState(false)
     const { register, handleSubmit } = useForm()
+
+    console.log(vehiculeNeuf, vehiculeTourisme, vehiculeEnergie)
+
 
     const showVehiculeTypeInput = () => {
         const type = datas.vehicules[1].type
@@ -26,20 +30,35 @@ const Simulateur = () => {
     }
 
     const showCo2Input = () => {
-        return (
-            <>
-                <label htmlFor="">Taux d'emission de C02 en gramme</label><br />
-                <select name="" id="" ref={register}>
+        if (vehiculeNeuf && vehiculeTourisme && !vehiculeEnergie) {
+            return (
+                <>
+                    <label htmlFor="co2">Taux d'emission de Co2 en gramme par kilomètre</label><br />
+                    <select name="co2" id="co2" ref={register}>
+                        {tauxCo2.map(item => <option key={item.id} value={item.id}>{item.taux}</option>)}
+                    </select><br /><br />
+                </>
+            )
+        }
 
-                </select><br /><br />
-            </>
-        )
     }
 
+    const checkVehiculeNeuf = (e) => {
+        if (e.target.value == 1) setVehiculeNeuf(true)
+        else setVehiculeNeuf(false)
+    }
     const handleChange = (e) => {
-        if (e.target.value == 1) setVehiculeTypeInput(true)
+        if (e.target.value == 1) setVehiculeTourisme(true)
+        else setVehiculeTourisme(false)
+        if (e.target.value == 2) setVehiculeTypeInput(true)
         else setVehiculeTypeInput(false)
     }
+    const checkEnergie = (e) => {
+        if (e.target.value == 8) setVehiculeEnergie(true)
+        else setVehiculeEnergie(false)
+    }
+
+
 
     const onSubmit = (data) => {
         let submittedDatas = {
@@ -110,7 +129,7 @@ const Simulateur = () => {
 
 
         // MONTANT TOTAL
-        let montantTotal = y1 + y2 + y3 + y4 + y5 + y6
+        let montantTotal = y1 + y2 + y3 + y4 + y5 + frais
 
     }
 
@@ -118,29 +137,30 @@ const Simulateur = () => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="demarches">Type de démarche</label><br />
-            <select name="demarches" id="demarches" ref={register}>
-                {datas.demarches.map((item, index) => <option key={item.id} value={index}>{item.demarche}</option>)}
+            <select onChange={checkVehiculeNeuf} name="demarches" id="demarches" ref={register}>
+                {datas.demarches.map(item => <option key={item.id} value={item.id}>{item.demarche}</option>)}
             </select><br /><br />
 
             <label htmlFor="vehicules">Type de véhicule</label><br />
             <select onChange={handleChange} name="vehicules" id="vehicules" ref={register}>
-                {datas.vehicules.map((item, index) => <option key={item.id} value={index}>{item.vehicule}</option>)}
+                {datas.vehicules.map(item => <option key={item.id} value={item.id}>{item.vehicule}</option>)}
             </select><br /><br />
 
             {showVehiculeTypeInput()}
 
             <label htmlFor="energies">Type d'energie</label><br />
-            <select name="energies" id="energies" ref={register}>
-                {datas.energies.map((item, index) => <option key={item.id} value={index}>{item.energie}</option>)}
+            <select onChange={checkEnergie} name="energies" id="energies" ref={register}>
+                {datas.energies.map(item => <option key={item.id} value={item.id}>{item.energie}</option>)}
             </select><br /><br />
 
+            {showCo2Input()}
 
             <label htmlFor="chevauxFiscaux">Chevaux fiscaux</label><br />
             <input type="number" name="chevauxFiscaux" id="chevauxFiscaux" ref={register} /><br /><br />
 
             <label htmlFor="departements">Votre département</label><br />
             <select name="departements" id="departements" ref={register}>
-                {datas.departements.map((item, index) => <option key={item.id} value={index}>{item.name}-{item.codeDep}</option>)}
+                {datas.departements.map(item => <option key={item.id} value={item.id}>{item.name}-{item.codeDep}</option>)}
             </select><br /><br />
 
             <label htmlFor="miseEnCirculation">Date de mise en circulation</label><br />
