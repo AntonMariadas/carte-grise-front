@@ -434,4 +434,9 @@ export const tauxCo2 = [
         "taux": "218 g",
         "taxe": 30000
     },
+    {
+        "id": 88,
+        "taux": "Supérieur à 218 g",
+        "taxe": 30000
+    }
 ]

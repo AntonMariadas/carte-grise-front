@@ -34,7 +34,7 @@ const Simulateur = () => {
                 <>
                     <label htmlFor="co2">Taux d'emission de Co2 en gramme par kilomètre</label><br />
                     <select name="co2" id="co2" ref={register}>
-                        {tauxCo2.map(item => <option key={item.id} value={item.id}>{item.taux}</option>)}
+                        {tauxCo2.map((item, index) => <option key={item.id} value={index}>{item.taux}</option>)}
                     </select><br /><br />
                 </>
             )
@@ -43,17 +43,17 @@ const Simulateur = () => {
     }
 
     const checkVehiculeNeuf = (e) => {
-        if (e.target.value == 1) setVehiculeNeuf(true)
+        if (e.target.value === 0) setVehiculeNeuf(true)
         else setVehiculeNeuf(false)
     }
     const handleChange = (e) => {
-        if (e.target.value == 1) setVehiculeTourisme(true)
+        if (e.target.value == 0) setVehiculeTourisme(true)
         else setVehiculeTourisme(false)
-        if (e.target.value == 2) setVehiculeTypeInput(true)
+        if (e.target.value == 1) setVehiculeTypeInput(true)
         else setVehiculeTypeInput(false)
     }
     const checkEnergie = (e) => {
-        if (e.target.value == 8) setVehiculeEnergie(true)
+        if (e.target.value == 7) setVehiculeEnergie(true)
         else setVehiculeEnergie(false)
     }
 
@@ -102,9 +102,7 @@ const Simulateur = () => {
         // /!\ ne concerne pas les véhicules electrique et hydrogène, ni les handicapés
 
         let y3
-        if (demarche.id == 1 && vehiculeType.id == 1 && energie.energie != 8) {
-            y3 = "test"
-        }
+
 
 
         // Y.4 TAXE DE GESTION
@@ -115,8 +113,17 @@ const Simulateur = () => {
 
         // ANCIENNETE 
         // plus de 10 ans -> 1/2 du tarif de base
-        // => vehicule tourisme neuf ou occasion
-        // => vehicule utilitaire neuf ou occasion (PTAC <= 3.5 Tonnes)
+        let today = new Date().getTime()
+        let date = Date.parse(miseEnCirculation)
+        let difference = today - date
+        let differenceInYears = difference / (1000 * 60 * 60 * 24 * 365)
+        console.log(differenceInYears);
+        if (differenceInYears >= 10) {
+            y1 = y1 / 2
+        }
+
+        console.log(y1);
+
 
         // plus de 10 ans -> 1/4 du tarif de base
         // => vehicule utilitaire neuf ou occasion (PTAC > 3.5 Tonnes)
@@ -138,19 +145,19 @@ const Simulateur = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="demarches">Type de démarche</label><br />
             <select onChange={checkVehiculeNeuf} name="demarches" id="demarches" ref={register}>
-                {datas.demarches.map(item => <option key={item.id} value={item.id}>{item.demarche}</option>)}
+                {datas.demarches.map((item, index) => <option key={item.id} value={index}>{item.demarche}</option>)}
             </select><br /><br />
 
             <label htmlFor="vehicules">Type de véhicule</label><br />
             <select onChange={handleChange} name="vehicules" id="vehicules" ref={register}>
-                {datas.vehicules.map(item => <option key={item.id} value={item.id}>{item.vehicule}</option>)}
+                {datas.vehicules.map((item, index) => <option key={item.id} value={index}>{item.vehicule}</option>)}
             </select><br /><br />
 
             {showVehiculeTypeInput()}
 
             <label htmlFor="energies">Type d'energie</label><br />
             <select onChange={checkEnergie} name="energies" id="energies" ref={register}>
-                {datas.energies.map(item => <option key={item.id} value={item.id}>{item.energie}</option>)}
+                {datas.energies.map((item, index) => <option key={item.id} value={index}>{item.energie}</option>)}
             </select><br /><br />
 
             {showCo2Input()}
@@ -160,7 +167,7 @@ const Simulateur = () => {
 
             <label htmlFor="departements">Votre département</label><br />
             <select name="departements" id="departements" ref={register}>
-                {datas.departements.map(item => <option key={item.id} value={item.id}>{item.name}-{item.codeDep}</option>)}
+                {datas.departements.map((item, index) => <option key={item.id} value={index}>{item.name}-{item.codeDep}</option>)}
             </select><br /><br />
 
             <label htmlFor="miseEnCirculation">Date de mise en circulation</label><br />
