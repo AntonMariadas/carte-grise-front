@@ -43,7 +43,7 @@ const Simulateur = () => {
     }
 
     const checkVehiculeNeuf = (e) => {
-        if (e.target.value === 0) setVehiculeNeuf(true)
+        if (e.target.value == 0) setVehiculeNeuf(true)
         else setVehiculeNeuf(false)
     }
     const handleChange = (e) => {
@@ -57,6 +57,7 @@ const Simulateur = () => {
         else setVehiculeEnergie(false)
     }
 
+
     /* TRAITEMENT DU FORMULAIRE */
 
     const onSubmit = (data) => {
@@ -68,6 +69,7 @@ const Simulateur = () => {
             departement: (datas.departements)[data.departements],
             chevauxFiscaux: data.chevauxFiscaux,
             miseEnCirculation: data.miseEnCirculation,
+            co2: tauxCo2[data.co2]
         }
 
         console.log(submittedDatas)
@@ -79,7 +81,8 @@ const Simulateur = () => {
             energie,
             departement,
             chevauxFiscaux,
-            miseEnCirculation
+            miseEnCirculation,
+            co2
         } = submittedDatas
 
         // Y.1 CALCUL TAXE REGIONALE
@@ -87,32 +90,31 @@ const Simulateur = () => {
         let taxeRegionale = datas.taxeRegionale.find(item => item.regionId == regionId)
         let montantTaxeRegionale = taxeRegionale.taxe * chevauxFiscaux
         let montantExoneration = (taxeRegionale.exoVehiculePropre * montantTaxeRegionale) / 100
-        // verification pour appliquer l'exoneration vehiculer propre
+        // verification pour appliquer l'exoneration vehiculer propre selon le departement
         let y1 = energie.energiePropre ? montantTaxeRegionale - montantExoneration : montantTaxeRegionale
+        console.log("y1 : " + y1);
 
 
         // Y.2 CALCUL TAXE FP TRANSPORT
-        let y2
-        if (vehiculeType) {
-            y2 = vehiculeType.taxeFPTransport
-        }
+        let y2 = vehiculeType ? vehiculeType.taxeFPTransport : 0
+        console.log("y2 : " + y2);
 
         // Y.3 CALCUL TAXE CO2
         // /!\ seulement pour les vehicules neufs, de tourisme
         // /!\ ne concerne pas les véhicules electrique et hydrogène, ni les handicapés
 
-        let y3
-
-
+        let y3 = co2.taxe
+        console.log("y3 : " + y3);
 
         // Y.4 TAXE DE GESTION
         const y4 = 11
+        console.log("y4 : " + y4);
 
         // Y.5 REDEVANCE D'ACHEMINEMENT
         const y5 = 2.76
+        console.log("y5 : " + y5);
 
-        // ANCIENNETE 
-        // plus de 10 ans -> 1/2 du tarif de base
+        // ANCIENNETE > 10ans taxe y1 50%
         let today = new Date().getTime()
         let date = Date.parse(miseEnCirculation)
         let difference = today - date
@@ -122,21 +124,13 @@ const Simulateur = () => {
             y1 = y1 / 2
         }
 
-        console.log(y1);
-
-
-        // plus de 10 ans -> 1/4 du tarif de base
-        // => vehicule utilitaire neuf ou occasion (PTAC > 3.5 Tonnes)
-        // => motocyclette
-
 
         // FRAIS DE TRAITEMENT
         const frais = 27.90
 
-
         // MONTANT TOTAL
         let montantTotal = y1 + y2 + y3 + y4 + y5 + frais
-
+        console.log(montantTotal);
     }
 
     /* FORMULAIRE */
