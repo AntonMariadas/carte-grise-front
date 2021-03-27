@@ -103,7 +103,7 @@ const Simulateur = () => {
         // /!\ seulement pour les vehicules neufs, de tourisme
         // /!\ ne concerne pas les véhicules electrique et hydrogène, ni les handicapés
 
-        let y3 = co2.taxe
+        let y3 = co2 ? co2.taxe : 0
         console.log("y3 : " + y3);
 
         // Y.4 TAXE DE GESTION
@@ -119,18 +119,18 @@ const Simulateur = () => {
         let date = Date.parse(miseEnCirculation)
         let difference = today - date
         let differenceInYears = difference / (1000 * 60 * 60 * 24 * 365)
-        console.log(differenceInYears);
+        console.log("Ancienneté : " + differenceInYears);
         if (differenceInYears >= 10) {
             y1 = y1 / 2
         }
-
+        console.log("Recalcul y1 : " + y1);
 
         // FRAIS DE TRAITEMENT
         const frais = 27.90
 
         // MONTANT TOTAL
-        let montantTotal = y1 + y2 + y3 + y4 + y5 + frais
-        console.log(montantTotal);
+        let Total = y1 + y2 + y3 + y4 + y5 + frais
+        console.log("Total " + Total);
     }
 
     /* FORMULAIRE */
