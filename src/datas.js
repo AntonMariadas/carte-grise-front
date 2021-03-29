@@ -14,7 +14,7 @@ export const datas = {
         },
         {
             "id": 4,
-            "demarche": "Duplicata suite à perte ou vol"
+            "demarche": "Duplicata suite à perte, vol ou détérioration"
         },
         {
             "id": 5,

@@ -102,9 +102,16 @@ const Simulateur = () => {
         // Y.3 CALCUL TAXE CO2
         // /!\ seulement pour les vehicules neufs, de tourisme
         // /!\ ne concerne pas les véhicules electrique et hydrogène, ni les handicapés
+        // /!\ abattement de 40% pour les vehicule roulant au e85
 
         let y3 = co2 ? co2.taxe : 0
         console.log("y3 : " + y3);
+        if (energie.id == 5) {
+            let abattement = y3 * 0.4
+            y3 = y3 - abattement
+            console.log("y3 avec reduction de 40% : " + y3);
+        }
+
 
         // Y.4 TAXE DE GESTION
         const y4 = 11
@@ -120,18 +127,52 @@ const Simulateur = () => {
         let difference = today - date
         let differenceInYears = difference / (1000 * 60 * 60 * 24 * 365)
         console.log("Ancienneté : " + differenceInYears);
-        if (differenceInYears >= 10) {
+        if (differenceInYears >= 10 && (vehicule.id == 1 || vehicule.id == 2)) {
             y1 = y1 / 2
+            console.log("Recalcul y1 voiture : " + y1);
         }
-        console.log("Recalcul y1 : " + y1);
+        if (differenceInYears <= 10 && vehicule.id == 3) {
+            y1 = y1 / 2
+            console.log("Recalcul y1 moto : " + y1);
+        }
+
 
         // FRAIS DE TRAITEMENT
         const frais = 27.90
+        console.log("Frais : " + frais);
 
-        // MONTANT TOTAL
-        let Total = y1 + y2 + y3 + y4 + y5 + frais
-        console.log("Total " + Total);
+
+        /* CALCUL DU TOTAL EN FONCTION DE LA DEMARCHE */
+        let total
+
+        // VOITURE
+        if (vehicule.id == 1 || vehicule.id == 2) {
+            // duplicata
+            if (demarche.id == 4) {
+                total = y4 + y5 + frais
+                console.log("Total duplicata voiture : " + total);
+            } else {
+                total = y1 + y2 + y3 + y4 + y5 + frais
+                console.log("Total voiture : " + total);
+            }
+        }
+        // MOTO
+        if (vehicule.id == 3) {
+            // duplicata
+            if (demarche.id == 4) {
+                total = y4 + frais
+                console.log("Total duplicata moto : " + total);
+            } else {
+                total = y1 + y3 + y4 + frais
+                console.log("Total moto : " + total);
+            }
+
+        }
+
     }
+
+
+
 
     /* FORMULAIRE */
 
