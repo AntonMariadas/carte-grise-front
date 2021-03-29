@@ -173,7 +173,6 @@ const Simulateur = () => {
 
 
 
-
     /* FORMULAIRE */
 
     return (
