@@ -1,8 +1,8 @@
 import "./App.css";
-import Navbar from "./components/Navbar";
 import { BrowserRouter as Router } from "react-router-dom"
-import "./Simulateur";
-import Simulateur from "./Simulateur";
+import Home from "./pages";
+import Formulaire from "./Formulaire";
+
 
 
 
@@ -10,7 +10,7 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar />
+      <Formulaire />
     </Router>
   );
 }
